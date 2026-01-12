@@ -87,7 +87,7 @@ p {
 .container button {
     cursor: pointer;
     font-family: "Gochi Hand", cursive;
-    color: var(--black-1);
+    color: #fff;
     font-size: 15px;
     width: 125px;
     margin: 10px;
@@ -113,4 +113,5 @@ p {
     transform: translateY(5px);
     padding-bottom: 0px;
     outline: 0;
+
 }
