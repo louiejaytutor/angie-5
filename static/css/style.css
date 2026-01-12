@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+:root {
+    --black-1: #313131;
+    --black-2: #393D42;
+    --black-3: #364651;
+
+    --red-1: #99180D;
+    --red-2: #B23028;
+    --red-3: #D3423D;
+}
+
+* {
+    font-family: 'Poppins';
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h3 {
+    color: var(--black-1);
+}
+
+p {
+    color: var(--black-1);
+    font-size: 12px;
+    text-align: center;
+}
+
+.container {
+    text-align: center;
+    max-width: 400px;
+    overflow: hidden;
+}
+.container .hidden {
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+.container .img {
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container img {
+    height: 300px;
+    width: 300px;
+    object-fit: contain;
+}
+.container .slide-1 img {
+    margin-left: -23px;
+}
+.container .slide-2 img {
+    zoom: 0.75;
+}
+.container .slide-3 img {
+    zoom: 0.95;
+}
+.container .slide-5 img {
+    zoom: 0.80;
+}
+.container .slide-6 img {
+    zoom: 0.85;
+}
+.container .slide-6 input {
+    display: block;
+    padding: 10px;
+    margin-top: 10px;
+    width: calc(100% - 25px);
+}
+.container .slide-7 img {
+    zoom: 0.75;
+}
+.container button {
+    cursor: pointer;
+    font-family: "Gochi Hand", cursive;
+    color: var(--black-1);
+    font-size: 15px;
+    width: 125px;
+    margin: 10px;
+    margin-top: 50px;
+    padding: 0;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    border: none;
+    transform: rotate(5deg);
+    transform-origin: center;
+    box-shadow: 0 2px 0 var(--red-1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background-color: var(--red-3);
+}
+.container button span {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--red-1);
+    border-radius: 5px;
+    background: var(--red-3);
+}
+.container button:active {
+    transform: translateY(5px);
+    padding-bottom: 0px;
+    outline: 0;
+}
