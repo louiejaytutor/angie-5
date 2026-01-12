@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Only For Angie</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="slide-1" class="slide-1">
+            <div class="img"><img src="static/img/image-1.gif"></div>
+            <h3>Hi Angie! I made something for you.</h3>
+            <p>I hope that you're doing good. Made by Louie.</p>
+            <button id="slide1-btn1"><span>Next</span></button>
+        </div>
+        <div id="slide-2" class="slide-2" style="display: none;">
+            <div class="img"><img src="static/img/image-2.gif"></div>
+            <h3>How's your heart feeling right now?</h3>
+            <button id="slide2-btn1"><span>I'm doing okay at the moment</span></button>
+            <button id="slide2-btn2"><span>I'm not feeling okay right now</span></button>
+        </div>
+        <div id="slide-3" class="slide-3" style="display: none;">
+            <div class="img"><img src="static/img/image-3.gif"></div>
+            <h3>What would feel better for you right now?</h3>
+            <button id="slide3-btn1"><span>I'd like someone to be with me</span></button>
+            <button id="slide3-btn2"><span>I need a little time alone</span></button>
+        </div>
+        <div id="slide-4" class="slide-4" style="display: none;">
+            <div class="img"><img src="static/img/image-4.gif"></div>
+            <h3>Would it be alright if we talked for a bit?</h3>
+            <button id="slide4-btn1"><span>Yes, I'd like that</span></button>
+            <button id="slide4-btn2"><span>Not right now</span></button>
+        </div>
+        <div id="slide-5" class="slide-5" style="display: none;">
+            <div class="img"><img src="static/img/image-5.gif"></div>
+            <h3>Do you think there might be a moment soon when we can talk?</h3>
+            <button id="slide5-btn1"><span>Yes</span></button>
+            <button id="slide5-btn2"><span>No</span></button>
+        </div>
+        <div id="slide-6" class="slide-6" style="display: none;">
+            <div class="img"><img src="static/img/image-6.gif"></div>
+            <h3>I want to tell you something</h3>
+            <p>Whatever you're going through right now, you don't have to rush being okay. You're stronger than you think, and I truly believe you'll get through this—one step at a time. I'm here whenever you need.</p>
+            <input id="slide6-input" placeholder="If you have any message, please leave here. Leave blank if none.">
+            <button id="slide6-btn1"><span>Next</span></button>
+        </div>
+        <div id="slide-7" class="slide-7" style="display: none;">
+            <div class="img"><img src="static/img/image-7.gif"></div>
+            <h3>Thank you for your time.</h3>
+            <p>I truly appreciate you and the moments we get to share.</p>
+            <button id="slide7-btn1"><span>Restart</span></button>
+        </div>
+    </div>
+    <audio id="audio" loop>
+        <source src="static/mp3/blue.mp3" type="audio/mpeg">
+    </audio>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import {
+            getFirestore, collection, doc, addDoc, serverTimestamp, getDoc, updateDoc
+        } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyACGoc6lsu92SIBil2oA-FEfVkAocIpe00",
+            authDomain: "todo-list-c310f.firebaseapp.com",
+            projectId: "todo-list-c310f",
+            storageBucket: "todo-list-c310f.firebasestorage.app",
+            messagingSenderId: "1954381734",
+            appId: "1:1954381734:web:466c42e5ddbcea8dcd1967",
+            measurementId: "G-2RK9RRWMC2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        let docId = "";
+
+        let slide1btn1 = document.getElementById("slide1-btn1");
+        let slide2btn1 = document.getElementById("slide2-btn1");
+        let slide2btn2 = document.getElementById("slide2-btn2");
+        let slide3btn1 = document.getElementById("slide3-btn1");
+        let slide3btn2 = document.getElementById("slide3-btn2");
+        let slide4btn1 = document.getElementById("slide4-btn1");
+        let slide4btn2 = document.getElementById("slide4-btn2");
+        let slide5btn1 = document.getElementById("slide5-btn1");
+        let slide5btn2 = document.getElementById("slide5-btn2");
+        let slide6input = document.getElementById("slide6-input");
+        let slide6btn1 = document.getElementById("slide6-btn1");
+        let slide7btn1 = document.getElementById("slide7-btn1");
+
+        let slide1 = document.getElementById("slide-1");
+        let slide2 = document.getElementById("slide-2");
+        let slide3 = document.getElementById("slide-3");
+        let slide4 = document.getElementById("slide-4");
+        let slide5 = document.getElementById("slide-5");
+        let slide6 = document.getElementById("slide-6");
+        let slide7 = document.getElementById("slide-7");
+
+        const audio = document.getElementById("audio");
+
+        slide1btn1.addEventListener("click", async function() {
+            const docRef = await addDoc(collection(db, "app2-angie"), {
+                slide2_answer: "",
+                timestamp_slide2_created: "",
+                slide3_answer: "",
+                timestamp_slide3_created: "",
+                slide4_answer: "",
+                timestamp_slide4_created: "",
+                slide5_answer: "",
+                timestamp_slide5_created: "",
+                slide6_input: "",
+                timestamp_slide6_created: "",
+                timestamp_created: serverTimestamp()
+            });
+            docId = docRef.id;
+
+            audio.volume = 0.25;
+            if (audio.paused) {
+                audio.play();
+            }
+
+            showSlide2();
+        });
+
+        slide2btn1.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide2_answer: "I'm doing okay at the moment",
+                timestamp_slide2_created: serverTimestamp()
+            });
+
+            showSlide3();
+        });
+
+        slide2btn2.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide2_answer: "I'm not feeling okay right now",
+                timestamp_slide2_created: serverTimestamp()
+            });
+
+            showSlide3();
+        });
+
+        slide3btn1.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide3_answer: "I'd like someone to be with me",
+                timestamp_slide3_created: serverTimestamp()
+            });
+
+            showSlide4();
+        });
+
+        slide3btn2.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide3_answer: "I need a little time alone",
+                timestamp_slide3_created: serverTimestamp()
+            });
+
+            showSlide4();
+        });
+
+        slide4btn1.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide4_answer: "Yes, I'd like that",
+                timestamp_slide4_created: serverTimestamp()
+            });
+
+            showSlide5();
+        });
+
+        slide4btn2.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide4_answer: "Not right now",
+                timestamp_slide4_created: serverTimestamp()
+            });
+
+            showSlide5();
+        });
+
+        slide5btn1.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide5_answer: "Yes",
+                timestamp_slide5_created: serverTimestamp()
+            });
+
+            showSlide6();
+        });
+
+        slide5btn2.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide5_answer: "No",
+                timestamp_slide5_created: serverTimestamp()
+            });
+
+            showSlide6();
+        });
+
+        slide6btn1.addEventListener("click", async function() {
+            await updateDoc(doc(db, "app2-angie", docId), {
+                slide6_input: slide6input.value,
+                timestamp_slide6_created: serverTimestamp()
+            });
+
+            docId = "";
+            showSlide7();
+        });
+
+        slide7btn1.addEventListener("click", function() {
+            alert("Thank you for your time Angie! I really appreciate it.");
+            showSlide1();
+        });
+
+        function showSlide1() {
+            slide1.classList.remove("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "inherit";
+                slide2.style.display = "none";
+                slide3.style.display = "none";
+                slide4.style.display = "none";
+                slide5.style.display = "none";
+                slide6.style.display = "none";
+                slide7.style.display = "none";
+            }, 500);
+        }
+
+        function showSlide2() {
+            slide1.classList.add("hidden");
+            slide2.classList.remove("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "inherit";
+                slide3.style.display = "none";
+                slide4.style.display = "none";
+                slide5.style.display = "none";
+                slide6.style.display = "none";
+                slide7.style.display = "none";
+            }, 500);
+        }
+        
+        function showSlide3() {
+            slide1.classList.add("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.remove("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "none";
+                slide3.style.display = "inherit";
+                slide4.style.display = "none";
+                slide5.style.display = "none";
+                slide6.style.display = "none";
+                slide7.style.display = "none";
+            }, 500);
+        }
+
+        function showSlide4() {
+            slide1.classList.add("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.remove("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "none";
+                slide3.style.display = "none";
+                slide4.style.display = "inherit";
+                slide5.style.display = "none";
+                slide6.style.display = "none";
+                slide7.style.display = "none";
+            }, 500);
+        }
+
+        function showSlide5() {
+            slide1.classList.add("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.remove("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "none";
+                slide3.style.display = "none";
+                slide4.style.display = "none";
+                slide5.style.display = "inherit";
+                slide6.style.display = "none";
+                slide7.style.display = "none";
+            }, 500);
+        }
+
+        function showSlide6() {
+            slide1.classList.add("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.remove("hidden");
+            slide7.classList.add("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "none";
+                slide3.style.display = "none";
+                slide4.style.display = "none";
+                slide5.style.display = "none";
+                slide6.style.display = "inherit";
+                slide7.style.display = "none";
+            }, 500);
+        }
+
+        function showSlide7() {
+            slide1.classList.add("hidden");
+            slide2.classList.add("hidden");
+            slide3.classList.add("hidden");
+            slide4.classList.add("hidden");
+            slide5.classList.add("hidden");
+            slide6.classList.add("hidden");
+            slide7.classList.remove("hidden");
+            setTimeout(function() {
+                slide1.style.display = "none";
+                slide2.style.display = "none";
+                slide3.style.display = "none";
+                slide4.style.display = "none";
+                slide5.style.display = "none";
+                slide6.style.display = "none";
+                slide7.style.display = "inherit";
+            }, 500);
+        }
+    </script>
+</body>
+</html>
